@@ -6,7 +6,7 @@
 
 namespace Drupal\globalredirect\Tests;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Routing\UrlGenerator;
@@ -193,7 +193,7 @@ class GlobalRedirectTest extends WebTestBase {
     $headers = $this->drupalGetHeaders(TRUE);
 
     $ending_url = isset($headers[0]['location']) ? $headers[0]['location'] : NULL;
-    $message = String::format('Testing redirect from %from to %to. Ending url: %url', array('%from' => $path, '%to' => $expected_ending_url, '%url' => $ending_url));
+    $message = SafeMarkup::format('Testing redirect from %from to %to. Ending url: %url', array('%from' => $path, '%to' => $expected_ending_url, '%url' => $ending_url));
 
     if ($expected_ending_url == '<front>') {
       $expected_ending_url = $GLOBALS['base_url'] . '/';
