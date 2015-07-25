@@ -125,13 +125,12 @@ class GlobalredirectSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $path_info = ltrim($event->getRequest()->getPathInfo(), '/');
+    $path_info = $event->getRequest()->getPathInfo();
     if (substr($path_info, -1, 1) === '/') {
-      $path_info = trim($path_info, '/');
+      $path_info = rtrim($path_info, '/');
       try {
         $path_info = $this->aliasManager->getPathByAlias($path_info);
-        // Need to add the slash back.
-        $this->setResponse($event, Url::fromUri('internal:/' . $path_info));
+        $this->setResponse($event, Url::fromUri('internal:' . $path_info));
       }
       catch (MatchingRouteNotFoundException $e) {
         // Do nothing here as it is not our responsibility to handle this.
@@ -150,7 +149,7 @@ class GlobalredirectSubscriber implements EventSubscriberInterface {
     }
 
     $request = $event->getRequest();
-    $path = trim($request->getPathInfo(), '/');
+    $path = $request->getPathInfo();
 
     // Redirect only if the current path is not the root and this is the front
     // page.
@@ -165,7 +164,7 @@ class GlobalredirectSubscriber implements EventSubscriberInterface {
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    */
   public function globalredirectNormalizeAliases(GetResponseEvent $event) {
-    if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST || !$this->config->get('normalize_aliases') || !$path = trim($event->getRequest()->getPathInfo(), '/')) {
+    if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST || !$this->config->get('normalize_aliases') || !$path = $event->getRequest()->getPathInfo()) {
       return;
     }
 
