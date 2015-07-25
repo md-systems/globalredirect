@@ -78,6 +78,11 @@ class RedirectChecker {
       $do_redirect &= !(bool) $route->getOption('_admin_route');
     }
 
+    // Do not redirect if is not a GET request.
+    if (!($request->isMethod('GET') || $request->isMethod('HEAD'))) {
+        $do_redirect = FALSE;
+    }
+
     return $do_redirect;
   }
 }

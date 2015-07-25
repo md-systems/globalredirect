@@ -152,6 +152,12 @@ class GlobalRedirectTest extends WebTestBase {
     $this->assertRedirect('node', NULL, 'HTTP/1.1 200 OK');
     $this->assertRedirect('node-alias', NULL, 'HTTP/1.1 200 OK');
 
+    // Test post request.
+    $this->config->set('normalize_aliases', TRUE)->save();
+    $this->drupalPost('Test-node', 'application/json', array());
+    // Does not do a redirect, stays in the same path.
+    $this->assertEqual(basename($this->getUrl()), 'Test-node');
+
     // Test the access checking.
 
     $this->config->set('normalize_aliases', TRUE)->save();
