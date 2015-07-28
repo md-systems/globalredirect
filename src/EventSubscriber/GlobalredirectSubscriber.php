@@ -126,7 +126,7 @@ class GlobalredirectSubscriber implements EventSubscriberInterface {
     }
 
     $path_info = $event->getRequest()->getPathInfo();
-    if (substr($path_info, -1, 1) === '/') {
+    if (substr($path_info, -1, 1) === '/' && $path_info != '/') {
       $path_info = rtrim($path_info, '/');
       try {
         $path_info = $this->aliasManager->getPathByAlias($path_info);
